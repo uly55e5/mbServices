@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: MassBank Minio API
+  version: "0.1"
+servers:
+- url: https://localhost:8080/
+paths:
+  /config/addConnection:
+    post:
+      operationId: addConnection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connection'
+      responses:
+        "200":
+          description: OK
+        "409":
+          description: Could not insert dataset
+components:
+  schemas:
+    Connection:
+      example:
+        Bucket: Bucket
+        Validate: massbankv2
+        minioURL: https://openapi-generator.tech
+        targetURL: https://openapi-generator.tech
+        Tags:
+        - Tags
+        - Tags
+      properties:
+        minioURL:
+          format: uri
+          nullable: false
+          type: string
+        targetURL:
+          format: uri
+          nullable: false
+          type: string
+        Bucket:
+          type: string
+        Tags:
+          default: []
+          items:
+            type: string
+          type: array
+        Validate:
+          default: massbankv2
+          type: string
+      type: object

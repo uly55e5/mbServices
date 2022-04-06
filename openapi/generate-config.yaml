@@ -1,0 +1,13 @@
+generatorName: go-server
+inputSpec: mbMinioServiceAPI.yaml
+outputDir: ../src
+templateDir: templates
+modelTests: true
+apiTests: true
+additionalProperties:
+  router: chi
+  addResponseHeaders: true
+  featureCORS: true
+  hideGenerationTimestamp: false
+  sourceFolder: openapi
+enablePostProcessFile: true

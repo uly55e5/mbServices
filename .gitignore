@@ -1,0 +1,8 @@
+**/node-modules
+/node_modules/
+/docker/minio-data/.minio.sys/
+/docker/.env
+/.idea/
+/src/go.sum
+/package-lock.json
+/openapi/openapitools.json
