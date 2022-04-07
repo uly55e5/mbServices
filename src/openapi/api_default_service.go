@@ -11,8 +11,8 @@ package openapi
 
 import (
 	"context"
-	"errors"
-	"net/http"
+	"encoding/json"
+	"github.com/uly55e5/mbServices/src/redisstore"
 )
 
 // DefaultApiService is a service that implements the logic for the DefaultApiServicer
@@ -28,14 +28,14 @@ func NewDefaultApiService() DefaultApiServicer {
 
 // AddConnection -
 func (s *DefaultApiService) AddConnection(ctx context.Context, connection Connection) (ImplResponse, error) {
-	// TODO - update AddConnection with the required logic for this service method.
-	// Add api_default_service.go to the .openapi-generator-ignore to avoid overwriting this service implementation when updating open api generation.
-
-	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
-	//return Response(200, nil),nil
-
-	//TODO: Uncomment the next line to return response Response(409, {}) or use other options such as http.Ok ...
-	//return Response(409, nil),nil
-
-	return Response(http.StatusNotImplemented, nil), errors.New("AddConnection method not implemented")
+	j, err := json.Marshal(connection)
+	if err != nil {
+		return Response(409, nil), nil
+	}
+	js := string(j)
+	err = redisstore.StoreConnection(js)
+	if err == nil {
+		return Response(200, nil), nil
+	}
+	return Response(409, nil), nil
 }

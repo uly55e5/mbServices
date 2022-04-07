@@ -3,7 +3,7 @@ info:
   title: MassBank Minio API
   version: "0.1"
 servers:
-  - url: https://localhost:8080/
+  - url: https://localhost:8081/
 components:
   schemas:
     Connection:
