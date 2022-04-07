@@ -19,6 +19,13 @@ paths:
         "409":
           description: Could not insert dataset
   /config/connections:
+    delete:
+      operationId: deleteAllConnections
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: error
     get:
       operationId: getConnections
       responses:
@@ -38,30 +45,75 @@ components:
   schemas:
     Connection:
       example:
-        Bucket: Bucket
-        Validate: massbankv2
-        minioURL: https://openapi-generator.tech
-        targetURL: https://openapi-generator.tech
-        Tags:
-        - Tags
-        - Tags
+        filter:
+          bucket: bucket
+          prefix: prefix
+          suffix: suffix
+        minio:
+          endpoint: endpoint
+          password: password
+          username: username
+          useSsl: true
+        target:
+          password: password
+          authmethod: authmethod
+          url: url
+          username: username
+        validate: massbankv2
       properties:
-        minioURL:
-          format: uri
-          nullable: false
-          type: string
-        targetURL:
-          format: uri
-          nullable: false
-          type: string
-        Bucket:
-          type: string
-        Tags:
-          default: []
-          items:
-            type: string
-          type: array
-        Validate:
+        minio:
+          $ref: '#/components/schemas/Connection_minio'
+        target:
+          $ref: '#/components/schemas/Connection_target'
+        filter:
+          $ref: '#/components/schemas/Connection_filter'
+        validate:
           default: massbankv2
+          type: string
+      type: object
+    Connection_minio:
+      example:
+        endpoint: endpoint
+        password: password
+        username: username
+        useSsl: true
+      properties:
+        endpoint:
+          nullable: false
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        useSsl:
+          type: boolean
+      type: object
+    Connection_target:
+      example:
+        password: password
+        authmethod: authmethod
+        url: url
+        username: username
+      properties:
+        url:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        authmethod:
+          type: string
+      type: object
+    Connection_filter:
+      example:
+        bucket: bucket
+        prefix: prefix
+        suffix: suffix
+      properties:
+        bucket:
+          type: string
+        prefix:
+          type: string
+        suffix:
           type: string
       type: object

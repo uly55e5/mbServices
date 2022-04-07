@@ -10,19 +10,26 @@
 package openapi
 
 type Connection struct {
-	MinioURL string `json:"minioURL,omitempty"`
+	Minio ConnectionMinio `json:"minio,omitempty"`
 
-	TargetURL string `json:"targetURL,omitempty"`
+	Target ConnectionTarget `json:"target,omitempty"`
 
-	Bucket string `json:"Bucket,omitempty"`
+	Filter ConnectionFilter `json:"filter,omitempty"`
 
-	Tags []string `json:"Tags,omitempty"`
-
-	Validate string `json:"Validate,omitempty"`
+	Validate string `json:"validate,omitempty"`
 }
 
 // AssertConnectionRequired checks if the required fields are not zero-ed
 func AssertConnectionRequired(obj Connection) error {
+	if err := AssertConnectionMinioRequired(obj.Minio); err != nil {
+		return err
+	}
+	if err := AssertConnectionTargetRequired(obj.Target); err != nil {
+		return err
+	}
+	if err := AssertConnectionFilterRequired(obj.Filter); err != nil {
+		return err
+	}
 	return nil
 }
 

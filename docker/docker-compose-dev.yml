@@ -14,6 +14,7 @@ services:
       - ./log:/var/log
   minio:
     image: minio/minio
+    hostname: minio
     restart: always
     command: server --console-address ":9001" /data
     ports:

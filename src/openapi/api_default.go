@@ -55,6 +55,12 @@ func (c *DefaultApiController) Routes() Routes {
 			c.AddConnection,
 		},
 		{
+			"DeleteAllConnections",
+			strings.ToUpper("Delete"),
+			"/config/connections",
+			c.DeleteAllConnections,
+		},
+		{
 			"GetConnections",
 			strings.ToUpper("Get"),
 			"/config/connections",
@@ -77,6 +83,19 @@ func (c *DefaultApiController) AddConnection(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	result, err := c.service.AddConnection(r.Context(), connectionParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, result.Headers, w)
+
+}
+
+// DeleteAllConnections -
+func (c *DefaultApiController) DeleteAllConnections(w http.ResponseWriter, r *http.Request) {
+	result, err := c.service.DeleteAllConnections(r.Context())
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

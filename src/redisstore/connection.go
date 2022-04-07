@@ -35,3 +35,14 @@ func GetConnections() ([]string, error) {
 
 	return js, nil
 }
+
+func DeleteAllConnections() error {
+	if rdb == nil {
+		err := Connect()
+		if err != nil {
+			return err
+		}
+	}
+	_, err := rdb.Del(context.Background(), "connections").Result()
+	return err
+}

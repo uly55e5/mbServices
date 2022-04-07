@@ -10,6 +10,7 @@
 package main
 
 import (
+	"github.com/uly55e5/mbServices/src/minio"
 	"github.com/uly55e5/mbServices/src/redisstore"
 	"log"
 	"net/http"
@@ -34,6 +35,7 @@ func main() {
 	DefaultApiService := openapi.NewDefaultApiService()
 	DefaultApiController := openapi.NewDefaultApiController(DefaultApiService)
 
+	go minio.GetNotifications()
 	router := openapi.NewRouter(DefaultApiController)
 
 	log.Fatal(http.ListenAndServe(":8080", router))

@@ -9,25 +9,41 @@ components:
     Connection:
       type: object
       properties:
-        minioURL:
-          type: string
-          format: uri
-          nullable: false
-        targetURL:
-          type: string
-          format: uri
-          nullable: false
-        Bucket:
-          type: string
-        Tags:
-          type: array
-          items:
-            type: string
-          default: [ ]
-        Validate:
+        minio:
+          type: object
+          properties:
+            endpoint:
+              type: string
+              nullable: false
+            username:
+              type: string
+            password:
+              type: string
+            useSsl:
+              type: boolean
+        target:
+          type: object
+          properties:
+            url:
+              type: string
+            username:
+              type: string
+            password:
+              type: string
+            authmethod:
+              type: string
+        filter:
+          type: object
+          properties:
+            bucket:
+              type: string
+            prefix:
+              type: string
+            suffix:
+              type: string
+        validate:
           type: string
           default: "massbankv2"
-
 paths:
   /config/addConnection:
     post:
@@ -58,6 +74,13 @@ paths:
             description: Not Found
         '500':
             description: Internal error
+    delete:
+      operationId: deleteAllConnections
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: error
 
 
 

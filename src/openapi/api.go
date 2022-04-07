@@ -19,6 +19,7 @@ import (
 // pass the data to a DefaultApiServicer to perform the required actions, then write the service results to the http response.
 type DefaultApiRouter interface {
 	AddConnection(http.ResponseWriter, *http.Request)
+	DeleteAllConnections(http.ResponseWriter, *http.Request)
 	GetConnections(http.ResponseWriter, *http.Request)
 }
 
@@ -28,5 +29,6 @@ type DefaultApiRouter interface {
 // and updated with the logic required for the API.
 type DefaultApiServicer interface {
 	AddConnection(context.Context, Connection) (ImplResponse, error)
+	DeleteAllConnections(context.Context) (ImplResponse, error)
 	GetConnections(context.Context) (ImplResponse, error)
 }

@@ -21,6 +21,14 @@ import (
 type DefaultApiService struct {
 }
 
+func (s *DefaultApiService) DeleteAllConnections(ctx context.Context) (ImplResponse, error) {
+	err := redisstore.DeleteAllConnections()
+	if err != nil {
+		return Response(400, nil), err
+	}
+	return Response(200, nil), nil
+}
+
 // NewDefaultApiService creates a default api service
 func NewDefaultApiService() DefaultApiServicer {
 	return &DefaultApiService{}
