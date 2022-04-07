@@ -35,7 +35,7 @@ func main() {
 	DefaultApiService := openapi.NewDefaultApiService()
 	DefaultApiController := openapi.NewDefaultApiController(DefaultApiService)
 
-	go minio.GetNotifications()
+	go minio.StartAllNotifications()
 	router := openapi.NewRouter(DefaultApiController)
 
 	log.Fatal(http.ListenAndServe(":8080", router))

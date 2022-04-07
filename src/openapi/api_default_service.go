@@ -13,6 +13,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/uly55e5/mbServices/src/redisstore"
+	"log"
 )
 
 // DefaultApiService is a service that implements the logic for the DefaultApiServicer
@@ -54,14 +55,9 @@ func (s *DefaultApiService) GetConnections(ctx context.Context) (ImplResponse, e
 	if err != nil {
 		return Response(500, nil), err
 	}
-	cc := []Connection{}
-	for _, s := range ss {
-		c := Connection{}
-		err = json.Unmarshal([]byte(s), &c)
-		if err != nil {
-			return Response(500, nil), err
-		}
-		cc = append(cc, c)
+	cc, err := ConvertToConnection(ss)
+	if err != nil {
+		return Response(500, nil), err
 	}
 	if err != nil {
 		return Response(500, nil), err
@@ -70,4 +66,18 @@ func (s *DefaultApiService) GetConnections(ctx context.Context) (ImplResponse, e
 	r := Response(200, cc)
 	r.Headers = map[string][]string{"Content-Type": {"application/json"}}
 	return r, nil
+}
+
+func ConvertToConnection(ss []string) ([]Connection, error) {
+	cc := []Connection{}
+	for _, s := range ss {
+		c := Connection{}
+		err := json.Unmarshal([]byte(s), &c)
+		if err != nil {
+			log.Println("Could not read Connection: ", err.Error())
+			continue
+		}
+		cc = append(cc, c)
+	}
+	return cc, nil
 }
