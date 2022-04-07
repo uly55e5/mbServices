@@ -54,6 +54,12 @@ func (c *DefaultApiController) Routes() Routes {
 			"/config/addConnection",
 			c.AddConnection,
 		},
+		{
+			"GetConnections",
+			strings.ToUpper("Get"),
+			"/config/connections",
+			c.GetConnections,
+		},
 	}
 }
 
@@ -71,6 +77,19 @@ func (c *DefaultApiController) AddConnection(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	result, err := c.service.AddConnection(r.Context(), connectionParam)
+	// If an error occurred, encode the error with the status code
+	if err != nil {
+		c.errorHandler(w, r, err, &result)
+		return
+	}
+	// If no error, encode the body and the result code
+	EncodeJSONResponse(result.Body, &result.Code, result.Headers, w)
+
+}
+
+// GetConnections -
+func (c *DefaultApiController) GetConnections(w http.ResponseWriter, r *http.Request) {
+	result, err := c.service.GetConnections(r.Context())
 	// If an error occurred, encode the error with the status code
 	if err != nil {
 		c.errorHandler(w, r, err, &result)

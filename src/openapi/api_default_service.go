@@ -30,12 +30,36 @@ func NewDefaultApiService() DefaultApiServicer {
 func (s *DefaultApiService) AddConnection(ctx context.Context, connection Connection) (ImplResponse, error) {
 	j, err := json.Marshal(connection)
 	if err != nil {
-		return Response(409, nil), nil
+		return Response(409, nil), err
 	}
 	js := string(j)
 	err = redisstore.StoreConnection(js)
 	if err == nil {
 		return Response(200, nil), nil
 	}
-	return Response(409, nil), nil
+	return Response(409, nil), err
+}
+
+// GetConnections -
+func (s *DefaultApiService) GetConnections(ctx context.Context) (ImplResponse, error) {
+	ss, err := redisstore.GetConnections()
+	if err != nil {
+		return Response(500, nil), err
+	}
+	cc := []Connection{}
+	for _, s := range ss {
+		c := Connection{}
+		err = json.Unmarshal([]byte(s), &c)
+		if err != nil {
+			return Response(500, nil), err
+		}
+		cc = append(cc, c)
+	}
+	if err != nil {
+		return Response(500, nil), err
+	}
+	//j, err := json.Marshal(cc)
+	r := Response(200, cc)
+	r.Headers = map[string][]string{"Content-Type": {"application/json"}}
+	return r, nil
 }
